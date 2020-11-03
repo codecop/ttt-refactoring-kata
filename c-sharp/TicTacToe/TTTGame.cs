@@ -132,10 +132,16 @@ namespace TicTacToe
             }
         }
 
-        public bool IsCellEmpty(Position position)
+        private bool IsCellEmpty(Position position)
         {
             return !cells.ContainsKey(position);
         }
+
+        public bool HasAnyEmptyCells()
+        {
+            return Position.ALL.Where(position => IsCellEmpty(position)).Count() > 0;
+        }
+
     }
 
     public class TTTGame
@@ -159,28 +165,23 @@ namespace TicTacToe
 
         private void AddWinningCombinationsTo(List<Winner> results)
         {
-            AddCombination(results, grid.CellAt(Position.A1), grid.CellAt(Position.A2), grid.CellAt(Position.A3));
-            AddCombination(results, grid.CellAt(Position.B1), grid.CellAt(Position.B2), grid.CellAt(Position.B3));
-            AddCombination(results, grid.CellAt(Position.C1), grid.CellAt(Position.C2), grid.CellAt(Position.C3));
+            AddCombination(results, Position.A1, Position.A2, Position.A3);
+            AddCombination(results, Position.B1, Position.B2, Position.B3);
+            AddCombination(results, Position.C1, Position.C2, Position.C3);
 
-            AddCombination(results, grid.CellAt(Position.A1), grid.CellAt(Position.B1), grid.CellAt(Position.C1));
-            AddCombination(results, grid.CellAt(Position.A2), grid.CellAt(Position.B2), grid.CellAt(Position.C2));
-            AddCombination(results, grid.CellAt(Position.A3), grid.CellAt(Position.B3), grid.CellAt(Position.C3));
+            AddCombination(results, Position.A1, Position.B1, Position.C1);
+            AddCombination(results, Position.A2, Position.B2, Position.C2);
+            AddCombination(results, Position.A3, Position.B3, Position.C3);
 
-            AddCombination(results, grid.CellAt(Position.A1), grid.CellAt(Position.B2), grid.CellAt(Position.C3));
-            AddCombination(results, grid.CellAt(Position.A3), grid.CellAt(Position.B2), grid.CellAt(Position.C1));
+            AddCombination(results, Position.A1, Position.B2, Position.C3);
+            AddCombination(results, Position.A3, Position.B2, Position.C1);
         }
 
-        private void AddCombination(List<Winner> results, Player cellA, Player cellB, Player cellC)
+        private void AddCombination(List<Winner> results, Position posA, Position posB, Position posC)
         {
-            if (cellA == cellB && cellA == cellC && cellA != null)
-            {
-                results.Add(cellA.asWinner);
-            }
-        }
-
-        private void AddCombinationx(List<Winner> results, Player cellA, Player cellB, Player cellC)
-        {
+            Player cellA = grid.CellAt(posA);
+            Player cellB = grid.CellAt(posB);
+            Player cellC = grid.CellAt(posC);
             if (cellA == cellB && cellA == cellC && cellA != null)
             {
                 results.Add(cellA.asWinner);
@@ -189,7 +190,7 @@ namespace TicTacToe
 
         private void AddUndecidedTo(List<Winner> results)
         {
-            if (HasAnyEmptyCells())
+            if (grid.HasAnyEmptyCells())
             {
                 results.Add(TicTacToe.Winner.UNDECIDED);
             }
@@ -197,15 +198,10 @@ namespace TicTacToe
 
         private void AddDrawTo(List<Winner> results)
         {
-            if (!HasAnyEmptyCells())
+            if (!grid.HasAnyEmptyCells())
             {
                 results.Add(TicTacToe.Winner.DRAW);
             }
-        }
-
-        private bool HasAnyEmptyCells()
-        {
-            return Position.ALL.Where(position => grid.IsCellEmpty(position)).Count() > 0;
         }
 
         public void placeCircle(Position position)
