@@ -105,7 +105,13 @@ namespace TicTacToe
 
     }
 
-    class Grid
+    interface IReadingGrid
+    {
+        Player CellAt(Position position);
+        bool HasAnyEmptyCells();
+    }
+
+    class Grid : IReadingGrid
     {
         private readonly IDictionary<Position, Player> cells = new Dictionary<Position, Player>();
 
@@ -146,17 +152,16 @@ namespace TicTacToe
 
     }
 
-    public class TTTGame
+    class WinnerFinder
     {
-        private Player lastPlayer;
-        private Grid grid = new Grid();
+        private readonly IReadingGrid grid;
 
-        public bool IsOver()
+        public WinnerFinder(IReadingGrid grid)
         {
-            return Winner() != TicTacToe.Winner.UNDECIDED;
+            this.grid = grid;
         }
 
-        public Winner Winner()
+        public Winner Find()
         {
             var results = new List<Winner>();
             AddWinningCombinationsTo(results);
@@ -204,6 +209,23 @@ namespace TicTacToe
             {
                 results.Add(TicTacToe.Winner.DRAW);
             }
+        }
+
+    }
+
+    public class TTTGame
+    {
+        private Player lastPlayer;
+        private Grid grid = new Grid();
+
+        public bool IsOver()
+        {
+            return Winner() != TicTacToe.Winner.UNDECIDED;
+        }
+
+        public Winner Winner()
+        {
+            return new WinnerFinder(grid).Find();
         }
 
         public void placeCircle(Position position)
