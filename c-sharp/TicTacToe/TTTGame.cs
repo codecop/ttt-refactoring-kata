@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +19,7 @@ namespace TicTacToe
         public int x { get; private set; } // TODO encapsulate
         public int y { get; private set; } // TODO encapsulate
 
-        private Position(int x, int y)
+        public Position(int x, int y) // TODO encapsulate
         {
             this.x = x;
             this.y = y;
@@ -77,9 +78,9 @@ namespace TicTacToe
         public static readonly Player CIRCLE = new Player(1);
         public static readonly Player CROSS = new Player(2);
 
-        private int code { get; set; }
+        public int code { get; private set; } // TODO encapsulate
 
-        public Player(int code)
+        private Player(int code)
         {
             this.code = code;
         }
@@ -106,6 +107,11 @@ namespace TicTacToe
     {
         private IDictionary<Position, Player> cells = new Dictionary<Position, Player>();
 
+        public Player Get(int x, int y)
+        {
+            return Get(new Position(x, y));
+        }
+
         public Player Get(Position position)
         {
             if (cells.ContainsKey(position))
@@ -123,10 +129,15 @@ namespace TicTacToe
 
         private void ValidateIsEmpty(Position position)
         {
-            if (cells.ContainsKey(position))
+            if (!IsEmpty(position))
             {
                 throw new TicTacException();
             }
+        }
+
+        public bool IsEmpty(Position position)
+        {
+            return !cells.ContainsKey(position);
         }
     }
 
@@ -154,26 +165,26 @@ namespace TicTacToe
         private void AddWinningCombinationsTo(List<Winner> results)
         {
             int i = 0;
-            AddCombination(results, cells[0, i], cells[1, i], cells[2, i]);
-            AddCombination(results, cells[i, 0], cells[i, 1], cells[i, 2]);
+            AddCombination(results, cells2.Get(0, i), cells2.Get(1, i), cells2.Get(2, i));
+            AddCombination(results, cells2.Get(i, 0), cells2.Get(i, 1), cells2.Get(i, 2));
 
             i++;
-            AddCombination(results, cells[0, i], cells[1, i], cells[2, i]);
-            AddCombination(results, cells[i, 0], cells[i, 1], cells[i, 2]);
+            AddCombination(results, cells2.Get(0, i), cells2.Get(1, i), cells2.Get(2, i));
+            AddCombination(results, cells2.Get(i, 0), cells2.Get(i, 1), cells2.Get(i, 2));
 
             i++;
-            AddCombination(results, cells[0, i], cells[1, i], cells[2, i]);
-            AddCombination(results, cells[i, 0], cells[i, 1], cells[i, 2]);
+            AddCombination(results, cells2.Get(0, i), cells2.Get(1, i), cells2.Get(2, i));
+            AddCombination(results, cells2.Get(i, 0), cells2.Get(i, 1), cells2.Get(i, 2));
 
-            AddCombination(results, cells[0, 0], cells[1, 1], cells[2, 2]);
-            AddCombination(results, cells[2, 0], cells[1, 1], cells[0, 2]);
+            AddCombination(results, cells2.Get(0, 0), cells2.Get(1, 1), cells2.Get(2, 2));
+            AddCombination(results, cells2.Get(2, 0), cells2.Get(1, 1), cells2.Get(0, 2));
         }
 
-        private void AddCombination(List<Winner> results, int cellA, int cellB, int cellC)
+        private void AddCombination(List<Winner> results, Player cellA, Player cellB, Player cellC)
         {
-            if (cellA == cellB && cellA == cellC && cellA != 0)
+            if (cellA == cellB && cellA == cellC && cellA != null)
             {
-                results.Add(new Winner(cellA));
+                results.Add(new Winner(cellA.code));
             }
         }
 
@@ -215,7 +226,7 @@ namespace TicTacToe
 
         private bool IsEmptyCell(int i, int j)
         {
-            return cells[j, i] == 0;
+            return cells2.IsEmpty(new Position(i, j));
         }
 
         public void placeCircle(Position p)
