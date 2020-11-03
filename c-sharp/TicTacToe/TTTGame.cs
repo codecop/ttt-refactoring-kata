@@ -23,6 +23,22 @@ namespace TicTacToe
             this.x = x;
             this.y = y;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            var other = (Position)obj;
+            return this.x == other.x && this.y == other.y;
+        }
+
+        public override int GetHashCode()
+        {
+            return x ^ y;
+        }
     }
 
     public class Result
@@ -40,6 +56,21 @@ namespace TicTacToe
             this.code = code;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            var other = (Result)obj;
+            return this.code == other.code;
+        }
+
+        public override int GetHashCode()
+        {
+            return code;
+        }
     }
 
     public class TTTGame
@@ -53,10 +84,6 @@ namespace TicTacToe
             return Winner() != Result.UNDECIDED;
         }
 
-        // 0 undecided
-        // 1 circle
-        // 2 cross
-        // 3 draw
         private Result Winner()
         {
             var results = WinningCombinations();
