@@ -132,7 +132,6 @@ namespace TicTacToe
 
     public class TTTGame
     {
-        private int lstMv;
         private Player lastPlayer;
 
         private int[,] cells = new int[3, 3];
@@ -224,13 +223,12 @@ namespace TicTacToe
             ValidatePlaceCircle(p);
             cells[p.x, p.y] = 1;
             cells2.Set(p, Player.CIRCLE);
-            lstMv = 1;
             lastPlayer = Player.CIRCLE;
         }
 
         private void ValidatePlaceCircle(Position p)
         {
-            if (IsOver() || (lstMv == 1) || (cells[p.x, p.y] != 0))
+            if (IsOver() || (lastPlayer == Player.CIRCLE))
             {
                 throw new TicTacException();
             }
@@ -241,13 +239,12 @@ namespace TicTacToe
             ValidatePlaceCross(p);
             cells[p.x, p.y] = 2;
             cells2.Set(p, Player.CROSS);
-            lstMv = 2;
             lastPlayer = Player.CROSS;
         }
 
         private void ValidatePlaceCross(Position p)
         {
-            if (lstMv == 2 || cells[p.x, p.y] != 0)
+            if (lastPlayer == Player.CROSS)
             {
                 throw new TicTacException();
             }
