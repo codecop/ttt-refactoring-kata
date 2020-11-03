@@ -139,7 +139,9 @@ namespace TicTacToe
 
         public bool HasAnyEmptyCells()
         {
-            return Position.ALL.Where(position => IsCellEmpty(position)).Count() > 0;
+            return Position.ALL. //
+                Where(position => IsCellEmpty(position)). //
+                Count() > 0;
         }
 
     }
