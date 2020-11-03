@@ -78,60 +78,47 @@ namespace TicTacToe
 
         private int[,] cells = new int[3, 3];
 
-        public bool isOver()
+        public bool IsOver()
         {
             return Winner() != TicTacToe.Winner.UNDECIDED;
         }
 
-        private Winner Winner()
+        public Winner Winner()
         {
-            var results = WinningCombinations();
-            AppendEmpty(results);
-            AppendDraw(results);
-            return results.ElementAt(0);
+            var results = new List<Winner>();
+            AddWinningCombinationsTo(results);
+            AddUndecidedTo(results);
+            AddDrawTo(results);
+            return results.First();
         }
 
-        private List<Winner> WinningCombinations()
+        private void AddWinningCombinationsTo(List<Winner> results)
         {
-            Winner[] results = new Winner[8];
-            int j = 0;
-
             int i = 0;
-            results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
-            j++;
-            results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
-            j++;
-            i++;
+            AddCombination(results, cells[0, i], cells[1, i], cells[2, i]);
+            AddCombination(results, cells[i, 0], cells[i, 1], cells[i, 2]);
 
-            results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
-            j++;
-            results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
-            j++;
             i++;
+            AddCombination(results, cells[0, i], cells[1, i], cells[2, i]);
+            AddCombination(results, cells[i, 0], cells[i, 1], cells[i, 2]);
 
-            results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
-            j++;
-            results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
-            j++;
             i++;
+            AddCombination(results, cells[0, i], cells[1, i], cells[2, i]);
+            AddCombination(results, cells[i, 0], cells[i, 1], cells[i, 2]);
 
-            results[j] = XX(cells[0, 0], cells[1, 1], cells[2, 2]);
-            j++;
-            results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
-            j++;
-            return results.Where(x => x != TicTacToe.Winner.UNDECIDED).Take(1).ToList();
+            AddCombination(results, cells[0, 0], cells[1, 1], cells[2, 2]);
+            AddCombination(results, cells[2, 0], cells[1, 1], cells[0, 2]);
         }
 
-        private Winner XX(int a, int b, int c)
+        private void AddCombination(List<Winner> results, int cellA, int cellB, int cellC)
         {
-            if (a == b && a == c && a != 0)
+            if (cellA == cellB && cellA == cellC && cellA != 0)
             {
-                return new Winner(a);
+                results.Add(new Winner(cellA));
             }
-            return TicTacToe.Winner.UNDECIDED;
         }
 
-        private void AppendEmpty(List<Winner> results)
+        private void AddUndecidedTo(List<Winner> results)
         {
             if (IsEmpty())
             {
@@ -139,7 +126,7 @@ namespace TicTacToe
             }
         }
 
-        private void AppendDraw(List<Winner> results)
+        private void AddDrawTo(List<Winner> results)
         {
             if (!IsEmpty())
             {
@@ -181,7 +168,7 @@ namespace TicTacToe
 
         private void ValidatePlaceCircle(Position p)
         {
-            if (isOver() || (lstMv == 1) || (cells[p.x, p.y] != 0))
+            if (IsOver() || (lstMv == 1) || (cells[p.x, p.y] != 0))
             {
                 throw new TicTacException();
             }
@@ -200,11 +187,6 @@ namespace TicTacToe
             {
                 throw new TicTacException();
             }
-        }
-
-        public Winner winner()
-        {
-            return Winner();
         }
     }
 }
