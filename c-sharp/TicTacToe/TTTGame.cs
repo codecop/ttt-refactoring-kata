@@ -3,6 +3,18 @@ using System.Linq;
 
 namespace TicTacToe
 {
+    public class Position
+    {
+        public int x { get; private set; }
+        public int y { get; private set; }
+
+        public Position(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     public class TTTGame
     {
         private int lstMv;
@@ -107,45 +119,31 @@ namespace TicTacToe
             return cells[j, i] == 0;
         }
 
-        public void makeMove(int i, int i1)
+        public void placeCircle(Position p)
         {
-            ValidateMakeMove(i, i1);
-            cells[i, i1] = 1;
-        }
-
-        private void ValidateMakeMove(int i, int i1)
-        {
-            if (cells[i, i1] == 1)
-            {
-                throw new TicTacException();
-            }
-        }
-
-        public void placeCircle(int i, int i1)
-        {
-            ValidatePlaceCircle(i, i1);
-            cells[i, i1] = 1;
+            ValidatePlaceCircle(p);
+            cells[p.x, p.y] = 1;
             lstMv = 1;
         }
 
-        private void ValidatePlaceCircle(int i, int i1)
+        private void ValidatePlaceCircle(Position p)
         {
-            if (isOver() || (lstMv == 1) || (cells[i, i1] != 0))
+            if (isOver() || (lstMv == 1) || (cells[p.x, p.y] != 0))
             {
                 throw new TicTacException();
             }
         }
 
-        public void placeCross(int i, int i1)
+        public void placeCross(Position p)
         {
-            ValidatePlaceCross(i, i1);
-            cells[i, i1] = 2;
+            ValidatePlaceCross(p);
+            cells[p.x, p.y] = 2;
             lstMv = 2;
         }
 
-        private void ValidatePlaceCross(int i, int i1)
+        private void ValidatePlaceCross(Position p)
         {
-            if (lstMv == 2 || cells[i, i1] != 0)
+            if (lstMv == 2 || cells[p.x, p.y] != 0)
             {
                 throw new TicTacException();
             }
