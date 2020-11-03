@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TicTacToe
@@ -19,17 +20,12 @@ namespace TicTacToe
         // 3 draw
         private int Winner()
         {
-            int[] results = WinningCombinations();
-
-            int z = results.FirstOrDefault(i => i != 0);
-            if (z != 0)
-                return z;
-
-            bool bEmpty = IsEmpty();
-            return bEmpty ? 0 : 3;
+            var results = WinningCombinations();
+            AppendDraw(results);
+            return results.ElementAt(0);
         }
 
-        private int[] WinningCombinations()
+        private List<int> WinningCombinations()
         {
             int[] results = new int[8];
             int j = 0;
@@ -57,7 +53,7 @@ namespace TicTacToe
             j++;
             results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
             j++;
-            return results;
+            return results.Where(x => x != 0).Take(1).ToList();
         }
 
         private int XX(int a, int b, int c)
@@ -67,6 +63,18 @@ namespace TicTacToe
                 return a;
             }
             return 0;
+        }
+
+        private void AppendDraw(List<int> results)
+        {
+            if (IsEmpty())
+            {
+                results.Add(0);
+            }
+            else
+            {
+                results.Add(3);
+            }
         }
 
         private bool IsEmpty()
