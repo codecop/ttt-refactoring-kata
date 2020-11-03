@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +6,7 @@ namespace TicTacToe
     public class Position
     {
         public static readonly IList<Position> ALL = new List<Position>();
+
         public static readonly Position A1 = new Position(0, 0);
         public static readonly Position A2 = new Position(0, 1);
         public static readonly Position A3 = new Position(0, 2);
@@ -51,7 +51,7 @@ namespace TicTacToe
         public static readonly Winner CROSS = new Winner(2);
         public static readonly Winner DRAW = new Winner(3);
 
-        private int code { get; set; }
+        private readonly int code;
 
         public Winner(int code)
         {
@@ -77,14 +77,14 @@ namespace TicTacToe
 
     class Player
     {
-        public static readonly Player CIRCLE = new Player(1);
-        public static readonly Player CROSS = new Player(2);
+        public static readonly Player CIRCLE = new Player(Winner.CIRCLE);
+        public static readonly Player CROSS = new Player(Winner.CROSS);
 
-        public int code { get; private set; } // TODO encapsulate
+        public readonly Winner asWinner;
 
-        private Player(int code)
+        private Player(Winner asWinner)
         {
-            this.code = code;
+            this.asWinner = asWinner;
         }
 
         public override bool Equals(object obj)
@@ -95,21 +95,21 @@ namespace TicTacToe
             }
 
             var other = (Player)obj;
-            return this.code == other.code;
+            return this.asWinner.Equals(other.asWinner);
         }
 
         public override int GetHashCode()
         {
-            return code;
+            return asWinner.GetHashCode();
         }
 
     }
 
-    class Cells
+    class Grid
     {
-        private IDictionary<Position, Player> cells = new Dictionary<Position, Player>();
+        private readonly IDictionary<Position, Player> cells = new Dictionary<Position, Player>();
 
-        public Player Get(Position position)
+        public Player CellAt(Position position)
         {
             if (cells.ContainsKey(position))
             {
@@ -118,7 +118,7 @@ namespace TicTacToe
             return null;
         }
 
-        public void Set(Position position, Player player)
+        public void SetCell(Position position, Player player)
         {
             ValidateIsEmpty(position);
             cells[position] = player;
@@ -126,13 +126,13 @@ namespace TicTacToe
 
         private void ValidateIsEmpty(Position position)
         {
-            if (!IsEmpty(position))
+            if (!IsCellEmpty(position))
             {
                 throw new TicTacException();
             }
         }
 
-        public bool IsEmpty(Position position)
+        public bool IsCellEmpty(Position position)
         {
             return !cells.ContainsKey(position);
         }
@@ -141,8 +141,7 @@ namespace TicTacToe
     public class TTTGame
     {
         private Player lastPlayer;
-
-        private Cells cells = new Cells();
+        private Grid grid = new Grid();
 
         public bool IsOver()
         {
@@ -160,29 +159,37 @@ namespace TicTacToe
 
         private void AddWinningCombinationsTo(List<Winner> results)
         {
-            AddCombination(results, cells.Get(Position.A1), cells.Get(Position.A2), cells.Get(Position.A3));
-            AddCombination(results, cells.Get(Position.B1), cells.Get(Position.B2), cells.Get(Position.B3));
-            AddCombination(results, cells.Get(Position.C1), cells.Get(Position.C2), cells.Get(Position.C3));
+            AddCombination(results, grid.CellAt(Position.A1), grid.CellAt(Position.A2), grid.CellAt(Position.A3));
+            AddCombination(results, grid.CellAt(Position.B1), grid.CellAt(Position.B2), grid.CellAt(Position.B3));
+            AddCombination(results, grid.CellAt(Position.C1), grid.CellAt(Position.C2), grid.CellAt(Position.C3));
 
-            AddCombination(results, cells.Get(Position.A1), cells.Get(Position.B1), cells.Get(Position.C1));
-            AddCombination(results, cells.Get(Position.A2), cells.Get(Position.B2), cells.Get(Position.C2));
-            AddCombination(results, cells.Get(Position.A3), cells.Get(Position.B3), cells.Get(Position.C3));
+            AddCombination(results, grid.CellAt(Position.A1), grid.CellAt(Position.B1), grid.CellAt(Position.C1));
+            AddCombination(results, grid.CellAt(Position.A2), grid.CellAt(Position.B2), grid.CellAt(Position.C2));
+            AddCombination(results, grid.CellAt(Position.A3), grid.CellAt(Position.B3), grid.CellAt(Position.C3));
 
-            AddCombination(results, cells.Get(Position.A1), cells.Get(Position.B2), cells.Get(Position.C3));
-            AddCombination(results, cells.Get(Position.A3), cells.Get(Position.B2), cells.Get(Position.C1));
+            AddCombination(results, grid.CellAt(Position.A1), grid.CellAt(Position.B2), grid.CellAt(Position.C3));
+            AddCombination(results, grid.CellAt(Position.A3), grid.CellAt(Position.B2), grid.CellAt(Position.C1));
         }
 
         private void AddCombination(List<Winner> results, Player cellA, Player cellB, Player cellC)
         {
             if (cellA == cellB && cellA == cellC && cellA != null)
             {
-                results.Add(new Winner(cellA.code));
+                results.Add(cellA.asWinner);
+            }
+        }
+
+        private void AddCombinationx(List<Winner> results, Player cellA, Player cellB, Player cellC)
+        {
+            if (cellA == cellB && cellA == cellC && cellA != null)
+            {
+                results.Add(cellA.asWinner);
             }
         }
 
         private void AddUndecidedTo(List<Winner> results)
         {
-            if (HasAnyEmpty())
+            if (HasAnyEmptyCells())
             {
                 results.Add(TicTacToe.Winner.UNDECIDED);
             }
@@ -190,30 +197,31 @@ namespace TicTacToe
 
         private void AddDrawTo(List<Winner> results)
         {
-            if (!HasAnyEmpty())
+            if (!HasAnyEmptyCells())
             {
                 results.Add(TicTacToe.Winner.DRAW);
             }
         }
 
-        private bool HasAnyEmpty()
+        private bool HasAnyEmptyCells()
         {
-            return Position.ALL.Where(position => cells.IsEmpty(position)).Count() > 0;
+            return Position.ALL.Where(position => grid.IsCellEmpty(position)).Count() > 0;
         }
 
-        public void placeCircle(Position p)
+        public void placeCircle(Position position)
         {
-            Player current = Player.CIRCLE;
-            ValidateTurn(current);
-            cells.Set(p, current);
-            lastPlayer = current;
+            Place(position, Player.CIRCLE);
         }
 
-        public void placeCross(Position p)
+        public void placeCross(Position position)
         {
-            Player current = Player.CROSS;
+            Place(position, Player.CROSS);
+        }
+
+        private void Place(Position position, Player current)
+        {
             ValidateTurn(current);
-            cells.Set(p, current);
+            grid.SetCell(position, current);
             lastPlayer = current;
         }
 
