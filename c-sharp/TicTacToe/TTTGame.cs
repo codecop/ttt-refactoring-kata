@@ -15,8 +15,8 @@ namespace TicTacToe
         public static readonly Position C2 = new Position(2, 1);
         public static readonly Position C3 = new Position(2, 2);
 
-        public int x { get; private set; }
-        public int y { get; private set; }
+        public int x { get; private set; } // TODO encapsulate
+        public int y { get; private set; } // TODO encapsulate
 
         private Position(int x, int y)
         {
@@ -72,11 +72,71 @@ namespace TicTacToe
         }
     }
 
+    class Player
+    {
+        public static readonly Player CIRCLE = new Player(1);
+        public static readonly Player CROSS = new Player(2);
+
+        private int code { get; set; }
+
+        public Player(int code)
+        {
+            this.code = code;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            var other = (Player)obj;
+            return this.code == other.code;
+        }
+
+        public override int GetHashCode()
+        {
+            return code;
+        }
+
+    }
+
+    class Cells
+    {
+        private IDictionary<Position, Player> cells = new Dictionary<Position, Player>();
+
+        public Player Get(Position position)
+        {
+            if (cells.ContainsKey(position))
+            {
+                return cells[position];
+            }
+            return null;
+        }
+
+        public void Set(Position position, Player player)
+        {
+            ValidateIsEmpty(position);
+            cells[position] = player;
+        }
+
+        private void ValidateIsEmpty(Position position)
+        {
+            if (cells.ContainsKey(position))
+            {
+                throw new TicTacException();
+            }
+        }
+    }
+
     public class TTTGame
     {
         private int lstMv;
+        private Player lastPlayer;
 
         private int[,] cells = new int[3, 3];
+        private Cells cells2 = new Cells();
 
         public bool IsOver()
         {
@@ -163,7 +223,9 @@ namespace TicTacToe
         {
             ValidatePlaceCircle(p);
             cells[p.x, p.y] = 1;
+            cells2.Set(p, Player.CIRCLE);
             lstMv = 1;
+            lastPlayer = Player.CIRCLE;
         }
 
         private void ValidatePlaceCircle(Position p)
@@ -178,7 +240,9 @@ namespace TicTacToe
         {
             ValidatePlaceCross(p);
             cells[p.x, p.y] = 2;
+            cells2.Set(p, Player.CROSS);
             lstMv = 2;
+            lastPlayer = Player.CROSS;
         }
 
         private void ValidatePlaceCross(Position p)
