@@ -220,31 +220,25 @@ namespace TicTacToe
 
         public void placeCircle(Position p)
         {
-            ValidatePlaceCircle(p);
+            Player current = Player.CIRCLE;
+            ValidateTurn(current);
             cells[p.x, p.y] = 1;
-            cells2.Set(p, Player.CIRCLE);
-            lastPlayer = Player.CIRCLE;
-        }
-
-        private void ValidatePlaceCircle(Position p)
-        {
-            if (IsOver() || (lastPlayer == Player.CIRCLE))
-            {
-                throw new TicTacException();
-            }
+            cells2.Set(p, current);
+            lastPlayer = current;
         }
 
         public void placeCross(Position p)
         {
-            ValidatePlaceCross(p);
+            Player current = Player.CROSS;
+            ValidateTurn(current);
             cells[p.x, p.y] = 2;
-            cells2.Set(p, Player.CROSS);
-            lastPlayer = Player.CROSS;
+            cells2.Set(p, current);
+            lastPlayer = current;
         }
 
-        private void ValidatePlaceCross(Position p)
+        private void ValidateTurn(Player current)
         {
-            if (lastPlayer == Player.CROSS)
+            if (IsOver() || lastPlayer == current)
             {
                 throw new TicTacException();
             }
