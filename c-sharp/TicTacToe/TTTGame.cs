@@ -17,30 +17,42 @@ namespace TicTacToe
         // 3 draw
         private int Winner()
         {
+            int[] results = new int[8];
+            int j = 0;
+
             for (int i = 0; i < 3; i++)
             {
-                if (cells[0, i] == cells[1, i]
-                    && cells[0, i] == cells[2, i]
-                    && cells[0, i] != 0)
-                    return cells[0, i];
-                if (cells[i, 0] == cells[i, 1]
-                    && cells[i, 0] == cells[i, 2]
-                    && cells[i, 0] != 0)
-                    return cells[i, 0];
+                results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
+                if (results[j] != 0)
+                    return results[j];
+                j++;
+                results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
+                if (results[j] != 0)
+                    return results[j];
+                j++;
             }
 
-            if (cells[0, 0] == cells[1, 1]
-                && cells[0, 0] == cells[2, 2]
-                && cells[0, 0] != 0)
-                return cells[0, 0];
+            results[j] = XX(cells[0, 0], cells[1, 1], cells[2, 2]);
+            if (results[j] != 0)
+                return results[j];
+            j++;
 
-            if (cells[2, 0] == cells[1, 1]
-                && cells[2, 0] == cells[0, 2]
-                && cells[2, 0] != 0)
-                return cells[2, 0];
+            results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
+            if (results[j] != 0)
+                return results[j];
+            j++;
 
             bool bEmpty = IsEmpty();
             return bEmpty ? 0 : 3;
+        }
+
+        private int XX(int a, int b, int c)
+        {
+            if (a == b && a == c && a != 0)
+            {
+                return a;
+            }
+            return 0;
         }
 
         private bool IsEmpty()
