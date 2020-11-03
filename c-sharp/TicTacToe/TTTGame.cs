@@ -21,6 +21,7 @@ namespace TicTacToe
         private int Winner()
         {
             var results = WinningCombinations();
+            AppendEmpty(results);
             AppendDraw(results);
             return results.ElementAt(0);
         }
@@ -65,13 +66,17 @@ namespace TicTacToe
             return 0;
         }
 
-        private void AppendDraw(List<int> results)
+        private void AppendEmpty(List<int> results)
         {
             if (IsEmpty())
             {
                 results.Add(0);
             }
-            else
+        }
+
+        private void AppendDraw(List<int> results)
+        {
+            if (!IsEmpty())
             {
                 results.Add(3);
             }
