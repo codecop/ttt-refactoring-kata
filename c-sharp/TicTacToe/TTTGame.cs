@@ -56,33 +56,46 @@ namespace TicTacToe
 
         public void makeMove(int i, int i1)
         {
-            if (cells[i, i1] == 1) throw new TicTacException();
-
+            ValidateMakeMove(i, i1);
             cells[i, i1] = 1;
         }
 
+        private void ValidateMakeMove(int i, int i1)
+        {
+            if (cells[i, i1] == 1)
+            {
+                throw new TicTacException();
+            }
+        }
+
         public void placeCircle(int i, int i1)
+        {
+            ValidatePlaceCircle(i, i1);
+            cells[i, i1] = 1;
+            lstMv = 1;
+        }
+
+        private void ValidatePlaceCircle(int i, int i1)
         {
             if (isOver() || (lstMv == 1) || (cells[i, i1] != 0))
             {
                 throw new TicTacException();
             }
-            else
-            {
-                cells[i, i1] = 1;
-                lstMv = 1;
-            }
         }
 
         public void placeCross(int i, int i1)
         {
-            if (lstMv == 2) throw new TicTacException();
-
-            if (cells[i, i1] != 0) throw new TicTacException();
-
+            ValidatePlaceCross(i, i1);
             cells[i, i1] = 2;
-
             lstMv = 2;
+        }
+
+        private void ValidatePlaceCross(int i, int i1)
+        {
+            if (lstMv == 2 || cells[i, i1] != 0)
+            {
+                throw new TicTacException();
+            }
         }
 
         public int winner()
