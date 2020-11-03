@@ -48,7 +48,7 @@ namespace TicTacToe
         public static readonly Winner CROSS = new Winner(2);
         public static readonly Winner DRAW = new Winner(3);
 
-        public int code { get; private set; }
+        private int code { get; set; }
 
         public Winner(int code)
         {
