@@ -25,6 +25,23 @@ namespace TicTacToe
         }
     }
 
+    public class Result
+    {
+
+        public static readonly Result UNDECIDED = new Result(0);
+        public static readonly Result WIN_CIRCLE = new Result(1);
+        public static readonly Result WIN_CROSS = new Result(2);
+        public static readonly Result DRAW = new Result(3);
+
+        public int code { get; private set; }
+
+        public Result(int code)
+        {
+            this.code = code;
+        }
+
+    }
+
     public class TTTGame
     {
         private int lstMv;
@@ -33,14 +50,14 @@ namespace TicTacToe
 
         public bool isOver()
         {
-            return Winner() != 0;
+            return Winner() != Result.UNDECIDED;
         }
 
         // 0 undecided
         // 1 circle
         // 2 cross
         // 3 draw
-        private int Winner()
+        private Result Winner()
         {
             var results = WinningCombinations();
             AppendEmpty(results);
@@ -48,9 +65,9 @@ namespace TicTacToe
             return results.ElementAt(0);
         }
 
-        private List<int> WinningCombinations()
+        private List<Result> WinningCombinations()
         {
-            int[] results = new int[8];
+            Result[] results = new Result[8];
             int j = 0;
 
             int i = 0;
@@ -76,31 +93,31 @@ namespace TicTacToe
             j++;
             results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
             j++;
-            return results.Where(x => x != 0).Take(1).ToList();
+            return results.Where(x => x != Result.UNDECIDED).Take(1).ToList();
         }
 
-        private int XX(int a, int b, int c)
+        private Result XX(int a, int b, int c)
         {
             if (a == b && a == c && a != 0)
             {
-                return a;
+                return new Result(a);
             }
-            return 0;
+            return Result.UNDECIDED;
         }
 
-        private void AppendEmpty(List<int> results)
+        private void AppendEmpty(List<Result> results)
         {
             if (IsEmpty())
             {
-                results.Add(0);
+                results.Add(Result.UNDECIDED);
             }
         }
 
-        private void AppendDraw(List<int> results)
+        private void AppendDraw(List<Result> results)
         {
             if (!IsEmpty())
             {
-                results.Add(3);
+                results.Add(Result.DRAW);
             }
         }
 
@@ -161,7 +178,7 @@ namespace TicTacToe
 
         public int winner()
         {
-            return Winner();
+            return Winner().code;
         }
     }
 }
