@@ -39,19 +39,33 @@ namespace TicTacToe
                 && cells[2, 0] != 0)
                 return cells[2, 0];
 
+            bool bEmpty = IsEmpty();
+            return bEmpty ? 0 : 3;
+        }
+
+        private bool IsEmpty()
+        {
             bool bEmpty = false;
             for (int i = 0; i < 3; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (cells[j, i] == 0)
-                    {
-                        bEmpty = true;
-                    }
-                }
+                bEmpty = bEmpty || IsEmptyColumn(i);
             }
+            return bEmpty;
+        }
 
-            return bEmpty ? 0 : 3;
+        private bool IsEmptyColumn(int i)
+        {
+            bool bEmpty = false;
+            for (int j = 0; j < 3; j++)
+            {
+                bEmpty = bEmpty || IsEmptyCell(i, j);
+            }
+            return bEmpty;
+        }
+
+        private bool IsEmptyCell(int i, int j)
+        {
+            return cells[j, i] == 0;
         }
 
         public void makeMove(int i, int i1)
