@@ -18,22 +18,22 @@ namespace TicTacToe.Tests
         public void GIVEN_new_game_THEN_can_place_a_circle()
         {
             var game = new TTTGame();
-            game.placeCircle(new Position(1, 1));
+            game.placeCircle(Position.B2);
         }
 
         [TestMethod]
         public void GIVEN_new_game_THEN_can_place_a_cross()
         {
             var game = new TTTGame();
-            game.placeCross(new Position(1, 1));
+            game.placeCross(Position.B2);
         }
 
         [TestMethod]
         public void GIVEN_new_game_WHEN_place_a_cross_THEN_can_place_a_circle_in_a_different_cell()
         {
             var game = new TTTGame();
-            game.placeCross(new Position(1, 1));
-            game.placeCircle(new Position(1, 2));
+            game.placeCross(Position.B2);
+            game.placeCircle(Position.B3);
         }
 
         [TestMethod]
@@ -41,8 +41,8 @@ namespace TicTacToe.Tests
         public void GIVEN_new_game_WHEN_last_move_placed_circle_THEN_can_not_place_a_circle()
         {
             var game = new TTTGame();
-            game.placeCircle(new Position(1, 1));
-            game.placeCircle(new Position(1, 2));
+            game.placeCircle(Position.B2);
+            game.placeCircle(Position.B3);
         }
 
         [TestMethod]
@@ -50,8 +50,8 @@ namespace TicTacToe.Tests
         public void GIVEN_new_game_WHEN_last_move_placed_cross_THEN_can_not_place_a_cross()
         {
             var game = new TTTGame();
-            game.placeCross(new Position(1, 1));
-            game.placeCross(new Position(1, 2));
+            game.placeCross(Position.B2);
+            game.placeCross(Position.B3);
         }
 
         [TestMethod]
@@ -59,8 +59,8 @@ namespace TicTacToe.Tests
         public void GIVEN_new_game_WHEN_cell_occupied_THEN_can_not_make_move_in_that_cell()
         {
             var game = new TTTGame();
-            game.placeCross(new Position(1, 1));
-            game.placeCircle(new Position(1, 1));
+            game.placeCross(Position.B2);
+            game.placeCircle(Position.B2);
         }
 
         [TestMethod]
@@ -70,7 +70,7 @@ namespace TicTacToe.Tests
             game.placeCross(new Position(0, 0));
             game.placeCircle(new Position(1, 0));
             game.placeCross(new Position(0, 1));
-            game.placeCircle(new Position(1, 1));
+            game.placeCircle(Position.B2);
             game.placeCross(new Position(0, 2));
 
             Assert.AreEqual(2, game.winner());
@@ -83,7 +83,7 @@ namespace TicTacToe.Tests
             game.placeCircle(new Position(0, 0));
             game.placeCross(new Position(1, 0));
             game.placeCircle(new Position(0, 1));
-            game.placeCross(new Position(1, 1));
+            game.placeCross(Position.B2);
             game.placeCircle(new Position(0, 2));
 
             Assert.AreEqual(1, game.winner());
@@ -96,7 +96,7 @@ namespace TicTacToe.Tests
             game.placeCross(new Position(2, 0));
             game.placeCircle(new Position(1, 0));
             game.placeCross(new Position(2, 1));
-            game.placeCircle(new Position(1, 1));
+            game.placeCircle(Position.B2);
             game.placeCross(new Position(2, 2));
             Assert.AreEqual(2, game.winner());
         }
@@ -119,7 +119,7 @@ namespace TicTacToe.Tests
             var game = new TTTGame();
             game.placeCross(new Position(0, 2));
             game.placeCircle(new Position(2, 0));
-            game.placeCross(new Position(1, 2));
+            game.placeCross(Position.B3);
             game.placeCircle(new Position(2, 1));
             game.placeCross(new Position(2, 2));
             Assert.AreEqual(2, game.winner());
@@ -131,7 +131,7 @@ namespace TicTacToe.Tests
             var game = new TTTGame();
             game.placeCross(new Position(0, 0));
             game.placeCircle(new Position(2, 0));
-            game.placeCross(new Position(1, 1));
+            game.placeCross(Position.B2);
             game.placeCircle(new Position(2, 1));
             game.placeCross(new Position(2, 2));
             Assert.AreEqual(2, game.winner());
@@ -143,7 +143,7 @@ namespace TicTacToe.Tests
             var game = new TTTGame();
             game.placeCross(new Position(0, 2));
             game.placeCircle(new Position(1, 0));
-            game.placeCross(new Position(1, 1));
+            game.placeCross(Position.B2);
             game.placeCircle(new Position(2, 1));
             game.placeCross(new Position(2, 0));
             Assert.AreEqual(2, game.winner());
@@ -158,8 +158,8 @@ namespace TicTacToe.Tests
             game.placeCircle(new Position(0, 1));
             game.placeCross(new Position(0, 2));
             game.placeCircle(new Position(1, 0));
-            game.placeCross(new Position(1, 1));
-            game.placeCircle(new Position(1, 2));
+            game.placeCross(Position.B2);
+            game.placeCircle(Position.B3);
             game.placeCross(new Position(2, 1));
             game.placeCircle(new Position(2, 0));
 
@@ -174,9 +174,9 @@ namespace TicTacToe.Tests
             game.placeCross(new Position(0, 0));
             game.placeCircle(new Position(1, 0));
             game.placeCross(new Position(0, 1));
-            game.placeCircle(new Position(1, 1));
+            game.placeCircle(Position.B2);
             game.placeCross(new Position(0, 2));
-            game.placeCircle(new Position(1, 2));
+            game.placeCircle(Position.B3);
         }
 
         [TestMethod]
@@ -187,7 +187,7 @@ namespace TicTacToe.Tests
             game.placeCross(new Position(0, 0));
             game.placeCircle(new Position(1, 0));
             game.placeCross(new Position(0, 1));
-            game.placeCircle(new Position(1, 1));
+            game.placeCircle(Position.B2);
             game.placeCross(new Position(0, 2));
 
             Assert.IsTrue(game.isOver());
@@ -201,7 +201,7 @@ namespace TicTacToe.Tests
             game.placeCircle(new Position(0, 0));
             game.placeCross(new Position(1, 0));
             game.placeCircle(new Position(0, 1));
-            game.placeCross(new Position(1, 1));
+            game.placeCross(Position.B2);
             game.placeCircle(new Position(0, 2));
 
             Assert.IsTrue(game.isOver());

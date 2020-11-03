@@ -5,6 +5,16 @@ namespace TicTacToe
 {
     public class Position
     {
+        public static readonly Position A1 = new Position(0, 0);
+        public static readonly Position A2 = new Position(0, 1);
+        public static readonly Position A3 = new Position(0, 2);
+        public static readonly Position B1 = new Position(1, 0);
+        public static readonly Position B2 = new Position(1, 1);
+        public static readonly Position B3 = new Position(1, 2);
+        public static readonly Position C1 = new Position(2, 0);
+        public static readonly Position C2 = new Position(2, 1);
+        public static readonly Position C3 = new Position(2, 2);
+
         public int x { get; private set; }
         public int y { get; private set; }
 
