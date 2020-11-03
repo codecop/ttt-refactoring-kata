@@ -19,21 +19,7 @@ namespace TicTacToe
         // 3 draw
         private int Winner()
         {
-            int[] results = new int[8];
-            int j = 0;
-
-            for (int i = 0; i < 3; i++)
-            {
-                results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
-                j++;
-                results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
-                j++;
-            }
-
-            results[j] = XX(cells[0, 0], cells[1, 1], cells[2, 2]);
-            j++;
-            results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
-            j++;
+            int[] results = WinningCombinations();
 
             int z = results.FirstOrDefault(i => i != 0);
             if (z != 0)
@@ -41,6 +27,37 @@ namespace TicTacToe
 
             bool bEmpty = IsEmpty();
             return bEmpty ? 0 : 3;
+        }
+
+        private int[] WinningCombinations()
+        {
+            int[] results = new int[8];
+            int j = 0;
+
+            int i = 0;
+            results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
+            j++;
+            results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
+            j++;
+            i++;
+
+            results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
+            j++;
+            results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
+            j++;
+            i++;
+
+            results[j] = XX(cells[0, i], cells[1, i], cells[2, i]);
+            j++;
+            results[j] = XX(cells[i, 0], cells[i, 1], cells[i, 2]);
+            j++;
+            i++;
+
+            results[j] = XX(cells[0, 0], cells[1, 1], cells[2, 2]);
+            j++;
+            results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
+            j++;
+            return results;
         }
 
         private int XX(int a, int b, int c)
