@@ -6,6 +6,7 @@ namespace TicTacToe
 {
     public class Position
     {
+        public static readonly IList<Position> ALL = new List<Position>();
         public static readonly Position A1 = new Position(0, 0);
         public static readonly Position A2 = new Position(0, 1);
         public static readonly Position A3 = new Position(0, 2);
@@ -16,13 +17,14 @@ namespace TicTacToe
         public static readonly Position C2 = new Position(2, 1);
         public static readonly Position C3 = new Position(2, 2);
 
-        public int x { get; private set; } // TODO encapsulate
-        public int y { get; private set; } // TODO encapsulate
+        private readonly int x;
+        private readonly int y;
 
-        public Position(int x, int y) // TODO encapsulate
+        private Position(int x, int y)
         {
             this.x = x;
             this.y = y;
+            ALL.Add(this);
         }
 
         public override bool Equals(object obj)
@@ -107,11 +109,6 @@ namespace TicTacToe
     {
         private IDictionary<Position, Player> cells = new Dictionary<Position, Player>();
 
-        public Player Get(int x, int y)
-        {
-            return Get(new Position(x, y));
-        }
-
         public Player Get(Position position)
         {
             if (cells.ContainsKey(position))
@@ -145,7 +142,7 @@ namespace TicTacToe
     {
         private Player lastPlayer;
 
-        private Cells cells  = new Cells();
+        private Cells cells = new Cells();
 
         public bool IsOver()
         {
@@ -163,20 +160,16 @@ namespace TicTacToe
 
         private void AddWinningCombinationsTo(List<Winner> results)
         {
-            int i = 0;
-            AddCombination(results, cells.Get(0, i), cells.Get(1, i), cells.Get(2, i));
-            AddCombination(results, cells.Get(i, 0), cells.Get(i, 1), cells.Get(i, 2));
+            AddCombination(results, cells.Get(Position.A1), cells.Get(Position.A2), cells.Get(Position.A3));
+            AddCombination(results, cells.Get(Position.B1), cells.Get(Position.B2), cells.Get(Position.B3));
+            AddCombination(results, cells.Get(Position.C1), cells.Get(Position.C2), cells.Get(Position.C3));
 
-            i++;
-            AddCombination(results, cells.Get(0, i), cells.Get(1, i), cells.Get(2, i));
-            AddCombination(results, cells.Get(i, 0), cells.Get(i, 1), cells.Get(i, 2));
+            AddCombination(results, cells.Get(Position.A1), cells.Get(Position.B1), cells.Get(Position.C1));
+            AddCombination(results, cells.Get(Position.A2), cells.Get(Position.B2), cells.Get(Position.C2));
+            AddCombination(results, cells.Get(Position.A3), cells.Get(Position.B3), cells.Get(Position.C3));
 
-            i++;
-            AddCombination(results, cells.Get(0, i), cells.Get(1, i), cells.Get(2, i));
-            AddCombination(results, cells.Get(i, 0), cells.Get(i, 1), cells.Get(i, 2));
-
-            AddCombination(results, cells.Get(0, 0), cells.Get(1, 1), cells.Get(2, 2));
-            AddCombination(results, cells.Get(2, 0), cells.Get(1, 1), cells.Get(0, 2));
+            AddCombination(results, cells.Get(Position.A1), cells.Get(Position.B2), cells.Get(Position.C3));
+            AddCombination(results, cells.Get(Position.A3), cells.Get(Position.B2), cells.Get(Position.C1));
         }
 
         private void AddCombination(List<Winner> results, Player cellA, Player cellB, Player cellC)
@@ -189,7 +182,7 @@ namespace TicTacToe
 
         private void AddUndecidedTo(List<Winner> results)
         {
-            if (IsEmpty())
+            if (HasAnyEmpty())
             {
                 results.Add(TicTacToe.Winner.UNDECIDED);
             }
@@ -197,35 +190,15 @@ namespace TicTacToe
 
         private void AddDrawTo(List<Winner> results)
         {
-            if (!IsEmpty())
+            if (!HasAnyEmpty())
             {
                 results.Add(TicTacToe.Winner.DRAW);
             }
         }
 
-        private bool IsEmpty()
+        private bool HasAnyEmpty()
         {
-            bool bEmpty = false;
-            for (int i = 0; i < 3; i++)
-            {
-                bEmpty = bEmpty || IsEmptyColumn(i);
-            }
-            return bEmpty;
-        }
-
-        private bool IsEmptyColumn(int i)
-        {
-            bool bEmpty = false;
-            for (int j = 0; j < 3; j++)
-            {
-                bEmpty = bEmpty || IsEmptyCell(i, j);
-            }
-            return bEmpty;
-        }
-
-        private bool IsEmptyCell(int i, int j)
-        {
-            return cells.IsEmpty(new Position(i, j));
+            return Position.ALL.Where(position => cells.IsEmpty(position)).Count() > 0;
         }
 
         public void placeCircle(Position p)
