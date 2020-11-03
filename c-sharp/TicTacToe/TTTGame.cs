@@ -145,8 +145,7 @@ namespace TicTacToe
     {
         private Player lastPlayer;
 
-        private int[,] cells = new int[3, 3];
-        private Cells cells2 = new Cells();
+        private Cells cells  = new Cells();
 
         public bool IsOver()
         {
@@ -165,19 +164,19 @@ namespace TicTacToe
         private void AddWinningCombinationsTo(List<Winner> results)
         {
             int i = 0;
-            AddCombination(results, cells2.Get(0, i), cells2.Get(1, i), cells2.Get(2, i));
-            AddCombination(results, cells2.Get(i, 0), cells2.Get(i, 1), cells2.Get(i, 2));
+            AddCombination(results, cells.Get(0, i), cells.Get(1, i), cells.Get(2, i));
+            AddCombination(results, cells.Get(i, 0), cells.Get(i, 1), cells.Get(i, 2));
 
             i++;
-            AddCombination(results, cells2.Get(0, i), cells2.Get(1, i), cells2.Get(2, i));
-            AddCombination(results, cells2.Get(i, 0), cells2.Get(i, 1), cells2.Get(i, 2));
+            AddCombination(results, cells.Get(0, i), cells.Get(1, i), cells.Get(2, i));
+            AddCombination(results, cells.Get(i, 0), cells.Get(i, 1), cells.Get(i, 2));
 
             i++;
-            AddCombination(results, cells2.Get(0, i), cells2.Get(1, i), cells2.Get(2, i));
-            AddCombination(results, cells2.Get(i, 0), cells2.Get(i, 1), cells2.Get(i, 2));
+            AddCombination(results, cells.Get(0, i), cells.Get(1, i), cells.Get(2, i));
+            AddCombination(results, cells.Get(i, 0), cells.Get(i, 1), cells.Get(i, 2));
 
-            AddCombination(results, cells2.Get(0, 0), cells2.Get(1, 1), cells2.Get(2, 2));
-            AddCombination(results, cells2.Get(2, 0), cells2.Get(1, 1), cells2.Get(0, 2));
+            AddCombination(results, cells.Get(0, 0), cells.Get(1, 1), cells.Get(2, 2));
+            AddCombination(results, cells.Get(2, 0), cells.Get(1, 1), cells.Get(0, 2));
         }
 
         private void AddCombination(List<Winner> results, Player cellA, Player cellB, Player cellC)
@@ -226,15 +225,14 @@ namespace TicTacToe
 
         private bool IsEmptyCell(int i, int j)
         {
-            return cells2.IsEmpty(new Position(i, j));
+            return cells.IsEmpty(new Position(i, j));
         }
 
         public void placeCircle(Position p)
         {
             Player current = Player.CIRCLE;
             ValidateTurn(current);
-            cells[p.x, p.y] = 1;
-            cells2.Set(p, current);
+            cells.Set(p, current);
             lastPlayer = current;
         }
 
@@ -242,8 +240,7 @@ namespace TicTacToe
         {
             Player current = Player.CROSS;
             ValidateTurn(current);
-            cells[p.x, p.y] = 2;
-            cells2.Set(p, current);
+            cells.Set(p, current);
             lastPlayer = current;
         }
 
