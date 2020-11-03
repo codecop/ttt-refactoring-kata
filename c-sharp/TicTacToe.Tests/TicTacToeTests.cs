@@ -73,7 +73,7 @@ namespace TicTacToe.Tests
             game.placeCircle(Position.B2);
             game.placeCross(Position.A3);
 
-            Assert.AreEqual(2, game.winner());
+            Assert.AreEqual(Winner.CROSS, game.winner());
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.B2);
             game.placeCircle(Position.A3);
 
-            Assert.AreEqual(1, game.winner());
+            Assert.AreEqual(Winner.CIRCLE, game.winner());
         }
 
         [TestMethod]
@@ -98,7 +98,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.C2);
             game.placeCircle(Position.B2);
             game.placeCross(Position.C3);
-            Assert.AreEqual(2, game.winner());
+            Assert.AreEqual(Winner.CROSS, game.winner());
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.B1);
             game.placeCircle(Position.C3);
             game.placeCross(Position.C1);
-            Assert.AreEqual(2, game.winner());
+            Assert.AreEqual(Winner.CROSS, game.winner());
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.B3);
             game.placeCircle(Position.C2);
             game.placeCross(Position.C3);
-            Assert.AreEqual(2, game.winner());
+            Assert.AreEqual(Winner.CROSS, game.winner());
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.B2);
             game.placeCircle(Position.C2);
             game.placeCross(Position.C3);
-            Assert.AreEqual(2, game.winner());
+            Assert.AreEqual(Winner.CROSS, game.winner());
         }
 
         [TestMethod]
@@ -146,7 +146,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.B2);
             game.placeCircle(Position.C2);
             game.placeCross(Position.C1);
-            Assert.AreEqual(2, game.winner());
+            Assert.AreEqual(Winner.CROSS, game.winner());
         }
 
         [TestMethod]
@@ -163,7 +163,7 @@ namespace TicTacToe.Tests
             game.placeCross(Position.C2);
             game.placeCircle(Position.C1);
 
-            Assert.AreEqual(3, game.winner());
+            Assert.AreEqual(Winner.DRAW, game.winner());
         }
 
         [TestMethod]

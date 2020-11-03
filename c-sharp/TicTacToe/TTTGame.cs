@@ -41,17 +41,16 @@ namespace TicTacToe
         }
     }
 
-    public class Result
+    public class Winner
     {
-
-        public static readonly Result UNDECIDED = new Result(0);
-        public static readonly Result WIN_CIRCLE = new Result(1);
-        public static readonly Result WIN_CROSS = new Result(2);
-        public static readonly Result DRAW = new Result(3);
+        public static readonly Winner UNDECIDED = new Winner(0);
+        public static readonly Winner CIRCLE = new Winner(1);
+        public static readonly Winner CROSS = new Winner(2);
+        public static readonly Winner DRAW = new Winner(3);
 
         public int code { get; private set; }
 
-        public Result(int code)
+        public Winner(int code)
         {
             this.code = code;
         }
@@ -63,7 +62,7 @@ namespace TicTacToe
                 return false;
             }
 
-            var other = (Result)obj;
+            var other = (Winner)obj;
             return this.code == other.code;
         }
 
@@ -81,10 +80,10 @@ namespace TicTacToe
 
         public bool isOver()
         {
-            return Winner() != Result.UNDECIDED;
+            return Winner() != TicTacToe.Winner.UNDECIDED;
         }
 
-        private Result Winner()
+        private Winner Winner()
         {
             var results = WinningCombinations();
             AppendEmpty(results);
@@ -92,9 +91,9 @@ namespace TicTacToe
             return results.ElementAt(0);
         }
 
-        private List<Result> WinningCombinations()
+        private List<Winner> WinningCombinations()
         {
-            Result[] results = new Result[8];
+            Winner[] results = new Winner[8];
             int j = 0;
 
             int i = 0;
@@ -120,31 +119,31 @@ namespace TicTacToe
             j++;
             results[j] = XX(cells[2, 0], cells[1, 1], cells[0, 2]);
             j++;
-            return results.Where(x => x != Result.UNDECIDED).Take(1).ToList();
+            return results.Where(x => x != TicTacToe.Winner.UNDECIDED).Take(1).ToList();
         }
 
-        private Result XX(int a, int b, int c)
+        private Winner XX(int a, int b, int c)
         {
             if (a == b && a == c && a != 0)
             {
-                return new Result(a);
+                return new Winner(a);
             }
-            return Result.UNDECIDED;
+            return TicTacToe.Winner.UNDECIDED;
         }
 
-        private void AppendEmpty(List<Result> results)
+        private void AppendEmpty(List<Winner> results)
         {
             if (IsEmpty())
             {
-                results.Add(Result.UNDECIDED);
+                results.Add(TicTacToe.Winner.UNDECIDED);
             }
         }
 
-        private void AppendDraw(List<Result> results)
+        private void AppendDraw(List<Winner> results)
         {
             if (!IsEmpty())
             {
-                results.Add(Result.DRAW);
+                results.Add(TicTacToe.Winner.DRAW);
             }
         }
 
@@ -203,9 +202,9 @@ namespace TicTacToe
             }
         }
 
-        public int winner()
+        public Winner winner()
         {
-            return Winner().code;
+            return Winner();
         }
     }
 }
